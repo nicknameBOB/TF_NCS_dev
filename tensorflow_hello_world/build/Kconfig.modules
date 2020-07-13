@@ -1,6 +1,0 @@
-osource "/home/jolu/ncs/nrf/Kconfig.nrf"
-
-osource "/home/jolu/ncs/bootloader/mcuboot/zephyr/Kconfig"
-
-osource "/home/jolu/ncs/nrfxlib/Kconfig.nrfxlib"
-
