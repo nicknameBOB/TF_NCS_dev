@@ -1,0 +1,43 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/home/jolu/ncs/tensorflow_micro_speech/build/CMakeFiles/tf_project"
+		},
+		{
+			"file" : "/home/jolu/ncs/tensorflow_micro_speech/build/CMakeFiles/tf_project.rule"
+		},
+		{
+			"file" : "/home/jolu/ncs/tensorflow_micro_speech/build/CMakeFiles/tf_project-complete.rule"
+		},
+		{
+			"file" : "/home/jolu/ncs/tensorflow_micro_speech/build/tf_project-prefix/src/tf_project-stamp/tf_project-install.rule"
+		},
+		{
+			"file" : "/home/jolu/ncs/tensorflow_micro_speech/build/tf_project-prefix/src/tf_project-stamp/tf_project-mkdir.rule"
+		},
+		{
+			"file" : "/home/jolu/ncs/tensorflow_micro_speech/build/tf_project-prefix/src/tf_project-stamp/tf_project-download.rule"
+		},
+		{
+			"file" : "/home/jolu/ncs/tensorflow_micro_speech/build/tf_project-prefix/src/tf_project-stamp/tf_project-update.rule"
+		},
+		{
+			"file" : "/home/jolu/ncs/tensorflow_micro_speech/build/tf_project-prefix/src/tf_project-stamp/tf_project-patch.rule"
+		},
+		{
+			"file" : "/home/jolu/ncs/tensorflow_micro_speech/build/tf_project-prefix/src/tf_project-stamp/tf_project-configure.rule"
+		},
+		{
+			"file" : "/home/jolu/ncs/tensorflow_micro_speech/build/tf_project-prefix/src/tf_project-stamp/tf_project-build.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"tf_project"
+		],
+		"name" : "tf_project"
+	}
+}
