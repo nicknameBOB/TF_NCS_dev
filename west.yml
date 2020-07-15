@@ -1,0 +1,18 @@
+manifest:
+  remotes:
+    - name: nordic
+      url-base: https://github.com/NordicPlayground
+    - name: tensorflow
+      url-base: https://github.com/tensorflow
+  projects:
+    - name: fw-nrfconnect-nrf
+      path: nrf
+      remote: nordic
+      revision: b645926ab1aab57b1569a5473c4b52a2c28cf880
+      import: true
+    - name: tensorflow
+      path: tensorflow
+      remote: tensorflow
+      revision: 4b0a6f818fa8e3c38fd0cf68d9a647f82cf6c93a
+  self:
+    path: tf_ncs_dev
