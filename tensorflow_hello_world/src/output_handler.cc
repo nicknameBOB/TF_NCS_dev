@@ -22,6 +22,10 @@ limitations under the License.
 #include <drivers/gpio.h>
 #include <drivers/pwm.h>
 
+#include <sys/__assert.h>
+
+#define LED0_NODE DT_ALIAS(led0)
+#define LED1_NODE DT_ALIAS(led1)
 
 #define PWM_LED0_NODE	DT_ALIAS(pwm_led0)
 #define FLAGS_OR_ZERO(node)                                                    \
@@ -57,12 +61,11 @@ new_period = (u32_t)((period * (y_value + 1) )/2);
         new_period = period;
     } 
     
-	
 	// Log the current X and Y values
-
-   pwm_pin_set_usec(pwm, PWM_CHANNEL, period, new_period , PWM_FLAGS); 
  	TF_LITE_REPORT_ERROR(error_reporter, "x_value: %f, y_value: %f\n",
 			     static_cast<double>(x_value),
 			     static_cast<double>(y_value)); 
+
+	// PWM sine-wave on LEDx
+	pwm_pin_set_usec(pwm, PWM_CHANNEL, period, new_period , PWM_FLAGS); 
 }
-// */
