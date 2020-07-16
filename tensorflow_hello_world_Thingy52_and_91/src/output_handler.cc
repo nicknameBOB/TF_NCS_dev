@@ -22,58 +22,56 @@ limitations under the License.
 
 #include <devicetree.h>
 #include <drivers/gpio.h>
+#include <sys/__assert.h>
+#include <string.h>
+
+
+// /* The devicetree node identifier for the "led0" alias. */
+// #define LED0_NODE DT_ALIAS(led0)
+
+// #if DT_NODE_HAS_STATUS(LED0_NODE, okay)
+// #define LED0	DT_GPIO_LABEL(LED0_NODE, gpios)
+// #define PIN0	DT_GPIO_PIN(LED0_NODE, gpios)
+// #if DT_PHA_HAS_CELL(LED0_NODE, gpios, flags)
+// #define FLAG0	DT_GPIO_FLAGS(LED0_NODE, gpios)
+// #endif
+// #else
+// /* A build error here means your board isn't set up to blink an LED. */
+// #error "Unsupported board: led0 devicetree alias is not defined"
+// #define LED0	""
+// #define PIN0	0
+// #endif
 
 
 
-/* 1000 msec = 1 sec */
-#define SLEEP_TIME_MS   1000
+// /* The devicetree node identifier for the "led1" alias. */
+// #define LED1_NODE DT_ALIAS(led1)
 
-/* The devicetree node identifier for the "led0" alias. */
-#define LED0_NODE DT_ALIAS(led0)
+// #if DT_NODE_HAS_STATUS(LED1_NODE, okay)
+// #define LED1	DT_GPIO_LABEL(LED1_NODE, gpios)
+// #define PIN1	DT_GPIO_PIN(LED1_NODE, gpios)
+// #if DT_PHA_HAS_CELL(LED1_NODE, gpios, flags)
+// #define FLAG1	DT_GPIO_FLAGS(LED1_NODE, gpios)
+// #endif
+// #else
+// /* A build error here means your board isn't set up to blink an LED. */
+// #error "Unsupported board: led1 devicetree alias is not defined"
+// #define LED1	""
+// #define PIN1	1
+// #endif
 
-#if DT_NODE_HAS_STATUS(LED0_NODE, okay)
-#define LED0	DT_GPIO_LABEL(LED0_NODE, gpios)
-#define PIN	DT_GPIO_PIN(LED0_NODE, gpios)
-#if DT_PHA_HAS_CELL(LED0_NODE, gpios, flags)
-#define FLAGS	DT_GPIO_FLAGS(LED0_NODE, gpios)
-#endif
-#else
-/* A build error here means your board isn't set up to blink an LED. */
-#error "Unsupported board: led0 devicetree alias is not defined"
-#define LED0	""
-#define PIN	0
-#endif
-
-#ifndef FLAGS
-#define FLAGS	0
-#endif
+// #ifndef FLAGS
+// #define FLAGS	0
+// #endif
 
 
-struct device *dev;
-bool led_is_on = true;
-int ret;
+// struct device *dev;
+// bool led_is_on = true;
+// int ret;
 
 
 static u32_t period;
 static u32_t new_period;
-
-
-// void outputInit()
-// {
-// 	dev = device_get_binding(LED0);
-// 	if (dev == NULL) {
-// 		return;
-// 	}
-// 
-// 	ret = gpio_pin_configure(dev, PIN, GPIO_OUTPUT_ACTIVE | FLAGS);
-// 	if (ret < 0) {
-// 		return;
-// 	};
-// 
-// 	// LED Blink ?
-// 	gpio_pin_set(dev, PIN, (int)led_is_on);
-// 			//led_is_on = !led_is_on;
-// }
 
 
 
@@ -94,18 +92,25 @@ new_period = (u32_t)((period * (y_value + 1) )/2);
 			     static_cast<double>(y_value)); 
 	
 
-	dev = device_get_binding(LED0);
-	if (dev == NULL) {
-		return;
-	}
+	// dev = device_get_binding(LED0);
+	// if (dev == NULL) {
+	// 	return;
+	// }
+	// dev = device_get_binding(LED1);
+	// if (dev == NULL) {
+	// 	return;
+	// }
+	// ret = gpio_pin_configure(dev, PIN0, GPIO_OUTPUT_ACTIVE | FLAG0);
+	// if (ret < 0) {
+	// 	return;
+	// };
+	// ret = gpio_pin_configure(dev, PIN1, GPIO_OUTPUT_ACTIVE | FLAG1);
+	// if (ret < 0) {
+	// 	return;
+	// };
 
-	ret = gpio_pin_configure(dev, PIN, GPIO_OUTPUT_ACTIVE | FLAGS);
-	if (ret < 0) {
-		return;
-	};
-
-
-	gpio_pin_set(dev, PIN, (int)led_is_on);
+	//gpio_pin_set(dev, PIN0, (int)led_is_on);
+	//gpio_pin_set(dev, PIN1, (int)led_is_on);
 			//led_is_on = !led_is_on;
 	
 }
