@@ -129,13 +129,14 @@ void tensorflow(u32_t sleep_ms){
     while (true) {
       loop();
 	  k_msleep(sleep_ms);
+	  //k_yield();
     }
   }
 }
 
 void uart_out(void)
 {
-	tensorflow(1000);
+	tensorflow(100);
 }
 
 K_THREAD_DEFINE(blink0_id, STACKSIZE, blink0, NULL, NULL, NULL,
