@@ -30,7 +30,7 @@ limitations under the License.
 /* scheduling priority used by each thread */
 #define PRIORITY 1
 
-// #define LED0_NODE DT_ALIAS(led0)
+#define LED0_NODE DT_ALIAS(led0)
 #define LED1_NODE DT_ALIAS(led1)
 
 #define FLAGS_OR_ZERO(node)						\
@@ -91,21 +91,21 @@ void blink(const struct led *led, u32_t sleep_ms, u32_t id)
 	}
 }
 
-// void blink0(void)
-// {
-// 	const struct led led0 = {
-// #if DT_NODE_HAS_STATUS(LED0_NODE, okay)
-// 		.gpio_dev_name = DT_GPIO_LABEL(LED0_NODE, gpios),
-// 		.gpio_pin_name = DT_LABEL(LED0_NODE),
-// 		.gpio_pin = DT_GPIO_PIN(LED0_NODE, gpios),
-// 		.gpio_flags = GPIO_OUTPUT | FLAGS_OR_ZERO(LED0_NODE),
-// #else
-// #error "Unsupported board: led0 devicetree alias is not defined"
-// #endif
-// 	};
+void blink0(void)
+{
+	const struct led led0 = {
+#if DT_NODE_HAS_STATUS(LED0_NODE, okay)
+		.gpio_dev_name = DT_GPIO_LABEL(LED0_NODE, gpios),
+		.gpio_pin_name = DT_LABEL(LED0_NODE),
+		.gpio_pin = DT_GPIO_PIN(LED0_NODE, gpios),
+		.gpio_flags = GPIO_OUTPUT | FLAGS_OR_ZERO(LED0_NODE),
+#else
+#error "Unsupported board: led0 devicetree alias is not defined"
+#endif
+	};
 
-// 	blink(&led0, 100, 0);
-// }
+	blink(&led0, 100, 0);
+}
 
 void blink1(void)
 {
@@ -125,16 +125,16 @@ void blink1(void)
 
 void uart_out(void)
 {
-//   int main(int argc, char* argv[]); {
-//     setup();
-//     while (true) {
-//       loop();
-//     }
-//   }
+  int main(int argc, char* argv[]); {
+    setup();
+    while (true) {
+      loop();
+    }
+  }
 }
 
-// K_THREAD_DEFINE(blink0_id, STACKSIZE, blink0, NULL, NULL, NULL,
-//     PRIORITY, 0, 0);
+K_THREAD_DEFINE(blink0_id, STACKSIZE, blink0, NULL, NULL, NULL,
+    PRIORITY, 0, 0);
 K_THREAD_DEFINE(blink1_id, STACKSIZE, blink1, NULL, NULL, NULL,
     PRIORITY, 0, 0);
 K_THREAD_DEFINE(uart_out_id, STACKSIZE, uart_out, NULL, NULL, NULL,
