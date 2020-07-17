@@ -123,14 +123,19 @@ void blink1(void)
 	blink(&led1, 1000, 1);
 }
 
-void uart_out(void)
-{
+void tensorflow(u32_t sleep_ms){
   int main(int argc, char* argv[]); {
     setup();
     while (true) {
       loop();
+	  k_msleep(sleep_ms);
     }
   }
+}
+
+void uart_out(void)
+{
+	tensorflow(1000);
 }
 
 K_THREAD_DEFINE(blink0_id, STACKSIZE, blink0, NULL, NULL, NULL,
