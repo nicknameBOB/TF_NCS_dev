@@ -7,21 +7,24 @@ There is no guarantee that this repo will work
 
 
 ##### Description
-Tensorflow examples in zephyr on nrf products:
-Using the  
+> Tensorflow examples in zephyr on nrf products:
+> Using the  
 
 
 
 ## info: before u start/good to know:
-U need the following, probebaly more:
-Zephyr-sdk repo
-nsc repo
-tenserflow repo
-how u want to settup it u is up to u 
+> U need the following, probebaly more:
+> Zephyr-sdk repo
+> nsc repo
+> tenserflow repo
+> how u want to settup it u is up to u 
+
+> Link to TF lite micro : https://www.tensorflow.org/lite/microcontrollers
+> Link to TF lite micro Hello World! exampel: https://github.com/tensorflow/tensorflow/tree/master/tensorflow/lite/micro/examples/hello_world
 
 ### How to set up
-This is how i did it:
-Operating system: linux based
+> This is how i did it:
+> Operating system: linux based
 
 
 ### 1
@@ -31,14 +34,14 @@ Operating system: linux based
 
 
 ### How to run an example 
-make shure u have the flatbuffers/flatbufers.h file, this can be made doing the following, 
-run make -f blablabalb
-or if that does not work run this exampel 
-run make -f xampel blablabla
+> make shure u have the flatbuffers/flatbufers.h file, this can be made doing the following, 
+> run make -f tensorflow/lite/micro/tools/make/Makefile third_party_downloads
+> or if that does not work run this exampel to build the same files, u dont acualy need to use the genrated exameple but it wil include make shure that you have the correct files.
+> run make -f tensorflow/lite/micro/tools/make/Makefile TARGET=esp generate_hello_world_esp_project
 
 Then u kan do the following to build whut Cmake 
 go to exampel >TF_hello_world_nrfXX 
-run west build -b <your board of coise>
+run west build -b ``<your board of coise>`` 
 run west flash
 
 ## How to use segger system view
