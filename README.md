@@ -2,8 +2,10 @@
 This repo is a work in progress project where the goal is to run tenserflow lite microcontroller example code on the nrf9160 using Zephyr. 
 
 
-🚧There is no guarantee that this repo will work🚧
+___
 
+**🚧** There is no guarantee that this repo will work **🚧**
+___
 
 
 ##### Description
@@ -15,6 +17,9 @@ This repo is a work in progress project where the goal is to run tenserflow lite
 
 
 ## info: before u start/good to know:
+Currently no native Windows suport due to some tensorflow  build dependecies. 
+
+
 U need the following:  
 pip3  
 west  
