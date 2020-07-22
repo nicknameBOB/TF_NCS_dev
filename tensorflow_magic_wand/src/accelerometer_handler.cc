@@ -21,6 +21,79 @@ limitations under the License.
 #include <string.h>
 #include <zephyr.h>
 
+#include "motion/motion.h"
+#include <logging/log.h>
+
+
+
+
+static int accelerometer_poll(motion_acceleration_data_t *sensor_data)
+{
+	if (sensor_data == NULL) {
+		return -EINVAL;
+	}
+
+	int err;
+
+	struct sensor_value accel_data[3];
+
+	/* If using the ADXL362 driver, all channels must be fetched */
+	if (IS_ENABLED(CONFIG_ADXL362)) {
+		err = sensor_sample_fetch_chan(accel_dev,
+						SENSOR_CHAN_ALL);
+	} else {
+		err = sensor_sample_fetch_chan(accel_dev,
+						SENSOR_CHAN_ACCEL_XYZ);
+	}
+
+	if (err) {
+		LOG_ERR("sensor_sample_fetch failed");
+		return err;
+	}
+
+	err = sensor_channel_get(accel_dev,
+			SENSOR_CHAN_ACCEL_X, &accel_data[0]);
+
+	if (err) {
+		LOG_ERR("sensor_channel_get failed");
+		return err;
+	}
+
+	err = sensor_channel_get(accel_dev,
+			SENSOR_CHAN_ACCEL_Y, &accel_data[1]);
+
+	if (err) {
+		LOG_ERR("sensor_channel_get failed");
+		return err;
+	}
+	err = sensor_channel_get(accel_dev,
+			SENSOR_CHAN_ACCEL_Z, &accel_data[2]);
+
+	if (err) {
+		LOG_ERR("sensor_channel_get failed");
+		return err;
+	}
+
+	sensor_data->x = sensor_value_to_double(&accel_data[0]);
+	sensor_data->y = sensor_value_to_double(&accel_data[1]);
+	sensor_data->z = sensor_value_to_double(&accel_data[2]);
+
+	return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #define BUFLEN 300
 int begin_index = 0;
 struct device* sensor = NULL;
@@ -33,14 +106,14 @@ float bufz[BUFLEN] = {0.0f};
 bool initial = true;
 
 TfLiteStatus SetupAccelerometer(tflite::ErrorReporter* error_reporter) {
-  sensor = device_get_binding(DT_INST_0_ADI_ADXL345_LABEL);
+  sensor = device_get_binding(CONFIG_ADXL362);
   if (sensor == NULL) {
     TF_LITE_REPORT_ERROR(error_reporter,
                          "Failed to get accelerometer, label: %s\n",
-                         DT_INST_0_ADI_ADXL345_LABEL);
+                         CONFIG_ADXL362);
   } else {
     TF_LITE_REPORT_ERROR(error_reporter, "Got accelerometer, label: %s\n",
-                         DT_INST_0_ADI_ADXL345_LABEL);
+                         CONFIG_ADXL362);
   }
   return kTfLiteOk;
 }
