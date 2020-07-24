@@ -1,4 +1,4 @@
-This example code does hte following:
+This example code does the following:
 
 Three difrent threads runing, 
 Two of the treads, thread 1 and 2 is used to blink onboard LED's at difrent intervals.
@@ -9,4 +9,3 @@ West build -b board_name
 west flash
 
 conect to device over uart\comport\tty and see the values of x and y.
-
