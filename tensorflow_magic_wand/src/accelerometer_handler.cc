@@ -24,76 +24,62 @@ limitations under the License.
 #include "motion/motion.h"
 #include <logging/log.h>
 
-
-
-
-static int accelerometer_poll(motion_acceleration_data_t *sensor_data)
+/**@brief Initializes the accelerometer device and
+ * configures trigger if set.
+ */
+static int accelerometer_init(void)
 {
-	if (sensor_data == NULL) {
+	int err = 0;
+
+	accel_dev = device_get_binding(CONFIG_ACCEL_DEV_NAME);
+
+	if (accel_dev == NULL) {
+		LOG_ERR("Could not get %s device",
+			log_strdup(CONFIG_ACCEL_DEV_NAME));
+		return -ENODEV;
+	}
+
+	if (IS_ENABLED(CONFIG_ACCEL_USE_EXTERNAL)) {
+
+		struct sensor_trigger sensor_trig = {
+			.type = SENSOR_TRIG_THRESHOLD,
+		};
+
+		err = sensor_trigger_set(accel_dev, &sensor_trig,
+				sensor_trigger_handler);
+
+		if (err) {
+			LOG_ERR("Unable to set accelerometer trigger");
+			return err;
+		}
+	}
+	return 0;
+}
+
+/**@brief Initialize motion module. */
+int motion_init_and_start(struct k_work_q *work_q,
+			  motion_handler_t motion_handler)
+{
+	if ((work_q == NULL) || (motion_handler == NULL)) {
 		return -EINVAL;
 	}
 
 	int err;
 
-	struct sensor_value accel_data[3];
+	motion_work_q = work_q;
+	handler = motion_handler;
 
-	/* If using the ADXL362 driver, all channels must be fetched */
-	if (IS_ENABLED(CONFIG_ADXL362)) {
-		err = sensor_sample_fetch_chan(accel_dev,
-						SENSOR_CHAN_ALL);
-	} else {
-		err = sensor_sample_fetch_chan(accel_dev,
-						SENSOR_CHAN_ACCEL_XYZ);
-	}
+	k_delayed_work_init(&motion_work, motion_work_q_handler);
+	err = accelerometer_init();
 
 	if (err) {
-		LOG_ERR("sensor_sample_fetch failed");
 		return err;
 	}
 
-	err = sensor_channel_get(accel_dev,
-			SENSOR_CHAN_ACCEL_X, &accel_data[0]);
-
-	if (err) {
-		LOG_ERR("sensor_channel_get failed");
-		return err;
-	}
-
-	err = sensor_channel_get(accel_dev,
-			SENSOR_CHAN_ACCEL_Y, &accel_data[1]);
-
-	if (err) {
-		LOG_ERR("sensor_channel_get failed");
-		return err;
-	}
-	err = sensor_channel_get(accel_dev,
-			SENSOR_CHAN_ACCEL_Z, &accel_data[2]);
-
-	if (err) {
-		LOG_ERR("sensor_channel_get failed");
-		return err;
-	}
-
-	sensor_data->x = sensor_value_to_double(&accel_data[0]);
-	sensor_data->y = sensor_value_to_double(&accel_data[1]);
-	sensor_data->z = sensor_value_to_double(&accel_data[2]);
-
+	sensor_trigger_handler(NULL, NULL);
 	return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+l
 #define BUFLEN 300
 int begin_index = 0;
 struct device* sensor = NULL;

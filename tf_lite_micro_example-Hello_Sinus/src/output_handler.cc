@@ -28,14 +28,5 @@ void HandleOutput(tflite::ErrorReporter *error_reporter, float x_value,
  	TF_LITE_REPORT_ERROR(error_reporter, "x_value: %f,  y_value: %f\n",
 			     static_cast<double>(x_value),
 			     static_cast<double>(y_value));
-				 //static_cast<double>(brightness)); 
 
-	// // Calculate the brightness of the LED such that y=-1 is fully off
-    // // and y=1 is fully on. The LED's brightness can range from 0-255.
-    // int brightness = (int)(127.5f * (y_value + 1));
-
-	// TF_LITE_REPORT_ERROR(error_reporter, "%d\n", 
-	// 			 static_cast<double>(brightness));
-    
-	//printk("%d\n", brightness);
 }
