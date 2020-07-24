@@ -15,4 +15,4 @@ limitations under the License.
 
 #include "constants.h"
 
-const int kInferencesPerCycle = 20000;
+const int kInferencesPerCycle = 1000;

@@ -126,9 +126,15 @@ void loop()
 	// Read the predicted y value from the model's output tensor
 	float y_val = output->data.f[0];
 
+	// Calculate the brightness of the LED such that y=-1 is fully off
+    // and y=1 is fully on. The LED's brightness can range from 0-255.
+    int brightness = (int)(127.5f * (y_val + 1));
+
+	printk("%d\n", brightness);
+	
 	// Output the results. A custom HandleOutput function can be implemented
 	// for each supported hardware target.
-	HandleOutput(error_reporter, x_val, y_val);
+	//HandleOutput(error_reporter, x_val, y_val);
 
 
 	// Increment the inference_counter, and reset it if we have reached

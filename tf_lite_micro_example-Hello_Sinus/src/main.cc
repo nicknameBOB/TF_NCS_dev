@@ -107,7 +107,7 @@ void blink1(void)
 	blink(&led1, 1000, 1);
 }
 
-
+//u32_t sleep_ms
 void tensorflow(u32_t sleep_ms)
 {
   int main(int argc, char* argv[]); {
@@ -122,7 +122,7 @@ void tensorflow(u32_t sleep_ms)
 
 void uart_out(void)
 {
-	tensorflow(100);
+	tensorflow(10);
 }
 
 
