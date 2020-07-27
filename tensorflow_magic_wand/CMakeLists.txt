@@ -14,6 +14,14 @@ target_sources(app PRIVATE src/gesture_predictor.cc)
 target_sources(app PRIVATE src/ring_micro_features_data.cc)
 target_sources(app PRIVATE src/slope_micro_features_data.cc)
 
+zephyr_include_directories(src src/motion)
+zephyr_include_directories(src src/adxl362)
+#zephyr_include_directories(/home/jolu/ncs/zephyr/drivers/sensor/adxl362)
+#zephyr_library()
+
+#zephyr_library_sources_ifdef(CONFIG_ADXL362 adxl362.c)
+#zephyr_library_sources_ifdef(CONFIG_ADXL362_TRIGGER adxl362_trigger.c)
+
 
 
 #zephyr_include_directories(src src/micro_features) 

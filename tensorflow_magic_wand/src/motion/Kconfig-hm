@@ -1,0 +1,68 @@
+menu "Motion"
+
+choice
+	prompt "Accelerometer device"
+	default ACCEL_USE_SIM
+	help
+	  Select which device will provide accelerometer data.
+
+config ACCEL_USE_SIM
+	bool "Use simulated accelerometer data"
+	select SENSOR
+	select SENSOR_SIM
+	select SENSOR_SIM_TRIGGER
+	select SENSOR_SIM_STATIC_VALUES
+	help
+	  Use sensor simulator to generate accelerometer data for
+	  flip detection data sent to nRF Cloud.
+
+config ACCEL_USE_EXTERNAL
+	bool "User provided accelerometer device"
+	help
+	  The user will provide an accelerometer device that will
+	  be used for flip detection.
+
+endchoice
+
+if ACCEL_USE_SIM
+config ACCEL_DEV_NAME
+	string
+	default SENSOR_SIM_DEV_NAME
+
+config ACCEL_TRIGGER
+	bool
+	default SENSOR_SIM_TRIGGER
+
+config FLIP_INPUT
+	int "Button or switch number to simulate flip"
+	range 1 4 if BOARD_NRF9160DK_NRF9160NS
+	range 1 1 if BOARD_THINGY91_NRF9160NS
+	default 3 if BOARD_NRF9160DK_NRF9160NS
+	default 1 if BOARD_THINGY91_NRF9160NS
+	help
+	  Button or switch number to use for simulating
+	  a board flip event.
+	  1 - Button 1
+	  2 - Button 2
+	  3 - Switch 1
+	  4 - Switch 2
+endif
+
+if ACCEL_USE_EXTERNAL
+
+config ACCEL_DEV_NAME
+	string "Accelerometer device name"
+	help
+	  Device from which accelerometer data will be fetched and used
+	  for orientation detection and sent to nRF Cloud.
+
+endif
+
+config ACCEL_INVERTED
+	bool "Accelerometer inverted"
+	default y if BOARD_THINGY91_NRF9160NS
+	help
+	  Enable if the accelerometer is mounted with the top side facing
+	  down when the board itself is in normal position.
+
+endmenu # Motion

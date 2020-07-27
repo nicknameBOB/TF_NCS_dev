@@ -22,64 +22,14 @@ limitations under the License.
 #include <zephyr.h>
 
 #include "motion/motion.h"
+#include "adxl362/adxl362.h"
 #include <logging/log.h>
 
-/**@brief Initializes the accelerometer device and
- * configures trigger if set.
- */
-static int accelerometer_init(void)
-{
-	int err = 0;
 
-	accel_dev = device_get_binding(CONFIG_ACCEL_DEV_NAME);
+/* Forward declaration of functions */
+static void motion_handler(motion_data_t  motion_data);
 
-	if (accel_dev == NULL) {
-		LOG_ERR("Could not get %s device",
-			log_strdup(CONFIG_ACCEL_DEV_NAME));
-		return -ENODEV;
-	}
 
-	if (IS_ENABLED(CONFIG_ACCEL_USE_EXTERNAL)) {
-
-		struct sensor_trigger sensor_trig = {
-			.type = SENSOR_TRIG_THRESHOLD,
-		};
-
-		err = sensor_trigger_set(accel_dev, &sensor_trig,
-				sensor_trigger_handler);
-
-		if (err) {
-			LOG_ERR("Unable to set accelerometer trigger");
-			return err;
-		}
-	}
-	return 0;
-}
-
-/**@brief Initialize motion module. */
-int motion_init_and_start(struct k_work_q *work_q,
-			  motion_handler_t motion_handler)
-{
-	if ((work_q == NULL) || (motion_handler == NULL)) {
-		return -EINVAL;
-	}
-
-	int err;
-
-	motion_work_q = work_q;
-	handler = motion_handler;
-
-	k_delayed_work_init(&motion_work, motion_work_q_handler);
-	err = accelerometer_init();
-
-	if (err) {
-		return err;
-	}
-
-	sensor_trigger_handler(NULL, NULL);
-	return 0;
-}
-l
 #define BUFLEN 300
 int begin_index = 0;
 struct device* sensor = NULL;
@@ -91,18 +41,20 @@ float bufz[BUFLEN] = {0.0f};
 
 bool initial = true;
 
+
 TfLiteStatus SetupAccelerometer(tflite::ErrorReporter* error_reporter) {
-  sensor = device_get_binding(CONFIG_ADXL362);
+  sensor = device_get_binding(DT_INST_0_ADI_ADXL362_LABEL);
   if (sensor == NULL) {
     TF_LITE_REPORT_ERROR(error_reporter,
                          "Failed to get accelerometer, label: %s\n",
-                         CONFIG_ADXL362);
+                         DT_INST_0_ADI_ADXL362_LABEL);
   } else {
     TF_LITE_REPORT_ERROR(error_reporter, "Got accelerometer, label: %s\n",
-                         CONFIG_ADXL362);
+                         DT_INST_0_ADI_ADXL362_LABEL);
   }
   return kTfLiteOk;
 }
+
 
 bool ReadAccelerometer(tflite::ErrorReporter* error_reporter, float* input,
                        int length) {
