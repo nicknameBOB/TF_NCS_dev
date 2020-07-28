@@ -93,10 +93,10 @@ void setup() {
 
   input_length = model_input->bytes / sizeof(float);
 
-  TfLiteStatus setup_status = SetupAccelerometer(error_reporter);
-  if (setup_status != kTfLiteOk) {
-    TF_LITE_REPORT_ERROR(error_reporter, "Set up failed\n");
-  }
+  // TfLiteStatus setup_status = SetupAccelerometer(error_reporter);
+  // if (setup_status != kTfLiteOk) {
+  //   TF_LITE_REPORT_ERROR(error_reporter, "Set up failed\n");
+  // }
 }
 
 void loop() {

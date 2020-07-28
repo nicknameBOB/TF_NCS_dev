@@ -4,29 +4,15 @@ cmake_minimum_required(VERSION 3.13.1)
 find_package(Zephyr HINTS $ENV{ZEPHYR_BASE})
 project(external_lib)
 
-target_sources(app PRIVATE src/assert.cc)
+#target_sources(app PRIVATE src/hello_world_test.cc)
 target_sources(app PRIVATE src/main.cc)
 target_sources(app PRIVATE src/main_functions.cc)
+target_sources(app PRIVATE src/constants.cc)
 target_sources(app PRIVATE src/output_handler.cc)
-target_sources(app PRIVATE src/accelerometer_handler.cc)
-target_sources(app PRIVATE src/magic_wand_model_data.cc)
-target_sources(app PRIVATE src/gesture_predictor.cc)
-target_sources(app PRIVATE src/ring_micro_features_data.cc)
-target_sources(app PRIVATE src/slope_micro_features_data.cc)
+target_sources(app PRIVATE src/model.cc)
+target_sources(app PRIVATE src/assert.cc)
 
-zephyr_include_directories(src src/motion)
-zephyr_include_directories(src src/adxl362)
-#zephyr_include_directories(/home/jolu/ncs/zephyr/drivers/sensor/adxl362)
-#zephyr_library()
-project(adxl362)
-
-#zephyr_library_sources_ifdef(CONFIG_ADXL362 adxl362.c)
-#zephyr_library_sources_ifdef(CONFIG_ADXL362_TRIGGER adxl362_trigger.c)
-
-
-
-#zephyr_include_directories(src src/micro_features) 
-
+zephyr_include_directories(src)
 
 #zephyr_cc_option(-lstdc++)
 
@@ -47,11 +33,10 @@ list(GET MCPU_FLAG_LIST 1 MCPU)
 set(TARGET ${BOARD})
 set(TARGET_ARCH cortex-m33)
 
-
 set(TF_SRC_DIR /home/jolu/tensorflow)
 set(TF_MAKE_DIR ${TF_SRC_DIR}/tensorflow/lite/micro/tools/make)
 set(TF_LIB_DIR ${TF_MAKE_DIR}/gen/${TARGET}_${TARGET_ARCH}/lib)
-set(extra_project_flags "-mcpu=${TARGET_ARCH} -mthumb -mno-thumb-interwork -mfpu=fpv5-sp-d16 ") #I had to remove -DTF_LITE_STATIC_MEMORY to make hello_world run. 
+set(extra_project_flags "-mcpu=${TARGET_ARCH} -mthumb -mno-thumb-interwork -mfpu=fpv5-sp-d16") #I had to remove -DTF_LITE_STATIC_MEMORY to make hello_world run. 
 
 zephyr_get_include_directories_for_lang_as_string(       C C_includes)
 zephyr_get_system_include_directories_for_lang_as_string(C C_system_includes)
@@ -94,8 +79,7 @@ ExternalProject_Add(
   BINARY_DIR ${TF_SRC_DIR} # This particular build system is invoked from the root
   CONFIGURE_COMMAND ""    # Skip configuring the project, e.g. with autoconf
   BUILD_COMMAND
-  ${submake} -f tensorflow/lite/micro/tools/make/Makefile 
-  MICRO_LITE_EXAMPLE_TESTS=${CMAKE_CURRENT_SOURCE_DIR}/Makefile.inc
+  ${submake} -f tensorflow/lite/micro/tools/make/Makefile
   TARGET=${TARGET}
   TARGET_ARCH=${TARGET_ARCH}
   TARGET_TOOLCHAIN_ROOT=${GNUARMEMB_TOOLCHAIN_PATH}/bin/
@@ -106,7 +90,7 @@ ExternalProject_Add(
   AR=${CMAKE_AR}
   CCFLAGS=${external_project_cflags} 
   CXXFLAGS=${external_project_cxxflags} 
-  microlite
+  microlite 
   INSTALL_COMMAND ""      # This particular build system has no install command
   BUILD_BYPRODUCTS ${TF_LIB_DIR}/libtensorflow-microlite.a
   )

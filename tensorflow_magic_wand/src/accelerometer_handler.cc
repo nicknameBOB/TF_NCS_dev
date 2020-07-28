@@ -25,6 +25,16 @@ limitations under the License.
 #include "adxl362/adxl362.h"
 #include <logging/log.h>
 
+#define DT_DRV_COMPAT adi_adxl362
+
+#include <kernel.h>
+
+#include <init.h>
+#include <drivers/gpio.h>
+#include <sys/byteorder.h>
+#include <sys/__assert.h>
+#include <drivers/spi.h>
+
 
 /* Forward declaration of functions */
 static void motion_handler(motion_data_t  motion_data);
@@ -40,20 +50,43 @@ float bufy[BUFLEN] = {0.0f};
 float bufz[BUFLEN] = {0.0f};
 
 bool initial = true;
+// #include <zephyr.h>
+// #include <stdio.h>
+// #include <device.h>
+// #include <drivers/sensor.h>
 
+// K_SEM_DEFINE(sem, 0, 1);
 
-TfLiteStatus SetupAccelerometer(tflite::ErrorReporter* error_reporter) {
-  sensor = device_get_binding(DT_INST_0_ADI_ADXL362_LABEL);
-  if (sensor == NULL) {
-    TF_LITE_REPORT_ERROR(error_reporter,
-                         "Failed to get accelerometer, label: %s\n",
-                         DT_INST_0_ADI_ADXL362_LABEL);
-  } else {
-    TF_LITE_REPORT_ERROR(error_reporter, "Got accelerometer, label: %s\n",
-                         DT_INST_0_ADI_ADXL362_LABEL);
-  }
-  return kTfLiteOk;
-}
+// static void trigger_handler(struct device *dev, struct sensor_trigger *trig)
+// {
+// 	switch (trig->type) {
+// 	case SENSOR_TRIG_DATA_READY:
+// 		if (sensor_sample_fetch(dev) < 0) {
+// 			printf("Sample fetch error\n");
+// 			return;
+// 		}
+// 		k_sem_give(&sem);
+// 		break;
+// 	case SENSOR_TRIG_THRESHOLD:
+// 		printf("Threshold trigger\n");
+// 		break;
+// 	default:
+// 		printf("Unknown trigger\n");
+// 	}
+// }
+
+// TfLiteStatus SetupAccelerometer(tflite::ErrorReporter* error_reporter) {
+//   sensor = device_get_binding(DT_LABEL(DT_INST(0, adi_adxl362)));
+//   if (sensor == NULL) {
+//     TF_LITE_REPORT_ERROR(error_reporter,
+//                          "Failed to get accelerometer, label: %s\n",
+//                          adi_adxl362);
+//   } else {
+//     TF_LITE_REPORT_ERROR(error_reporter, "Got accelerometer, label: %s\n",
+//                          adi_adxl362);
+//   }
+//   return kTfLiteOk;
+// }
 
 
 bool ReadAccelerometer(tflite::ErrorReporter* error_reporter, float* input,
