@@ -38,8 +38,9 @@ int input_length;
 // Create an area of memory to use for input, output, and intermediate arrays.
 // The size of this will depend on the model you're using, and may need to be
 // determined by experimentation.
-constexpr int kTensorArenaSize = 60 * 1024;
-uint8_t tensor_arena[kTensorArenaSize];
+constexpr int kTensorArenaSize = 80 * 1024;// 60 * 1024
+alignas(16) uint8_t tensor_arena[kTensorArenaSize];
+//  uint8_t tensor_arena[kTensorArenaSize];
 }  // namespace
 
 // The name of this function is important for Arduino compatibility.

@@ -35,11 +35,6 @@ limitations under the License.
 #include <sys/__assert.h>
 #include <drivers/spi.h>
 
-
-/* Forward declaration of functions */
-static void motion_handler(motion_data_t  motion_data);
-
-
 #define BUFLEN 300
 int begin_index = 0;
 struct device* sensor = NULL;
@@ -50,30 +45,7 @@ float bufy[BUFLEN] = {0.0f};
 float bufz[BUFLEN] = {0.0f};
 
 bool initial = true;
-#include <zephyr.h>
-#include <stdio.h>
-#include <device.h>
-#include <drivers/sensor.h>
 
-K_SEM_DEFINE(sem, 0, 1);
-
-static void trigger_handler(struct device *dev, struct sensor_trigger *trig)
-{
-	switch (trig->type) {
-	case SENSOR_TRIG_DATA_READY:
-		if (sensor_sample_fetch(dev) < 0) {
-			printf("Sample fetch error\n");
-			return;
-		}
-		k_sem_give(&sem);
-		break;
-	case SENSOR_TRIG_THRESHOLD:
-		printf("Threshold trigger\n");
-		break;
-	default:
-		printf("Unknown trigger\n");
-	}
-}
 
 TfLiteStatus SetupAccelerometer(tflite::ErrorReporter* error_reporter) {
   sensor = device_get_binding(DT_LABEL(DT_INST(0, adi_adxl362)));
@@ -140,3 +112,26 @@ bool ReadAccelerometer(tflite::ErrorReporter* error_reporter, float* input,
   }
   return true;
 }
+
+// /* Forward declaration of functions */
+// static void motion_handler(motion_data_t  motion_data);
+
+// K_SEM_DEFINE(sem, 0, 1);
+
+// static void trigger_handler(struct device *dev, struct sensor_trigger *trig)
+// {
+// 	switch (trig->type) {
+// 	case SENSOR_TRIG_DATA_READY:
+// 		if (sensor_sample_fetch(dev) < 0) {
+// 			printf("Sample fetch error\n");
+// 			return;
+// 		}
+// 		k_sem_give(&sem);
+// 		break;
+// 	case SENSOR_TRIG_THRESHOLD:
+// 		printf("Threshold trigger\n");
+// 		break;
+// 	default:
+// 		printf("Unknown trigger\n");
+// 	}
+// }
