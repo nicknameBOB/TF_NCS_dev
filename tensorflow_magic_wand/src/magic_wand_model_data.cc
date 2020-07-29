@@ -18,9 +18,19 @@ limitations under the License.
 // See the README for a full description of the creation process.
 
 #include "tensorflow/lite/micro/examples/magic_wand/magic_wand_model_data.h"
+#ifdef __has_attribute
+#define HAVE_ATTRIBUTE(x) __has_attribute(x)
+#else
+#define HAVE_ATTRIBUTE(x) 0
+#endif
+#if HAVE_ATTRIBUTE(aligned) || (defined(__GNUC__) && !defined(__clang__))
+#define DATA_ALIGN_ATTRIBUTE __attribute__((aligned(16)))
+#else
+#define DATA_ALIGN_ATTRIBUTE
+#endif
 
-// Keep model aligned to 8 bytes to guarantee aligned 64-bit accesses.
-alignas(8) const unsigned char g_magic_wand_model_data[] = {
+// Keep model aligned to 8 bytes to guarantee aligned 64-bit accesses. // 8 bit
+alignas(16) const unsigned char g_magic_wand_model_data[] = {
     0x1c, 0x00, 0x00, 0x00, 0x54, 0x46, 0x4c, 0x33, 0x00, 0x00, 0x12, 0x00,
     0x1c, 0x00, 0x04, 0x00, 0x08, 0x00, 0x0c, 0x00, 0x10, 0x00, 0x14, 0x00,
     0x00, 0x00, 0x18, 0x00, 0x12, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00,

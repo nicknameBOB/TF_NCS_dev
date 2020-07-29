@@ -100,12 +100,7 @@ void blink0(void)
 
 	blink(&led0, 100, 0);
 }
-
-/* Accelerometer printer  */
-void Motion(void)
-{
-
-	void trigger_handler(struct device *dev, struct sensor_trigger *trig);
+void trigger_handler(struct device *dev, struct sensor_trigger *trig)
 	{
 		switch (trig->type) {
 		case SENSOR_TRIG_DATA_READY:
@@ -122,6 +117,11 @@ void Motion(void)
 			printf("Unknown trigger\n");
 		}
 	}
+/* Accelerometer printer  */
+void Motion(void)
+{
+
+	
 
 	void main(void);
 	{
@@ -206,5 +206,5 @@ K_THREAD_DEFINE(blink0_id, STACKSIZE, blink0, NULL, NULL, NULL,
     PRIORITY, 0, 0);
 K_THREAD_DEFINE(blink1_id, STACKSIZE, Motion, NULL, NULL, NULL,
     PRIORITY, 0, 0);
-// K_THREAD_DEFINE(uart_out_id, STACKSIZE, uart_out, NULL, NULL, NULL,
-//     PRIORITY, 0, 0);
+K_THREAD_DEFINE(uart_out_id, STACKSIZE, uart_out, NULL, NULL, NULL,
+    PRIORITY, 0, 0);
