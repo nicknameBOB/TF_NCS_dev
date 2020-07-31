@@ -15,23 +15,25 @@ limitations under the License.
 
 #include "tensorflow/lite/micro/examples/magic_wand/accelerometer_handler.h"
 
-#include <zephyr.h>
-
-#include <stdio.h>
-#include <string.h>
-#include <kernel.h>
-#include <init.h>
 #include <device.h>
 #include <drivers/sensor.h>
+#include <stdio.h>
+#include <string.h>
+#include <zephyr.h>
+
+#include "motion/motion.h"
+#include "adxl362/adxl362.h"
+#include <logging/log.h>
+
+#define DT_DRV_COMPAT adi_adxl362
+
+#include <kernel.h>
+
+#include <init.h>
 #include <drivers/gpio.h>
 #include <sys/byteorder.h>
 #include <sys/__assert.h>
 #include <drivers/spi.h>
-// #include <logging/log.h>
-// #include "motion/motion.h"
-// #include "adxl362/adxl362.h"
-
-#define DT_DRV_COMPAT adi_adxl362
 
 #define BUFLEN 300
 int begin_index = 0;
@@ -44,25 +46,6 @@ float bufz[BUFLEN] = {0.0f};
 
 bool initial = true;
 
-K_SEM_DEFINE(sem, 0, 1);
-static void trigger_handler(struct device *sensor, struct sensor_trigger *trig)
-{
-	switch (trig->type) {
-	case SENSOR_TRIG_DATA_READY:
-		if (sensor_sample_fetch(sensor) < 0) {
-			printf("Sample fetch error\n");
-			return;
-		}
-		k_sem_give(&sem);
-		break;
-	case SENSOR_TRIG_THRESHOLD:
-		printf("Threshold trigger\n");
-		break;
-	default:
-		printf("Unknown trigger\n");
-	}
-}
-
 
 TfLiteStatus SetupAccelerometer(tflite::ErrorReporter* error_reporter) {
   sensor = device_get_binding(DT_LABEL(DT_INST(0, adi_adxl362)));
@@ -74,27 +57,13 @@ TfLiteStatus SetupAccelerometer(tflite::ErrorReporter* error_reporter) {
     TF_LITE_REPORT_ERROR(error_reporter, "Got accelerometer, label: %s\n",
                          DT_LABEL(DT_INST(0, adi_adxl362)));
   }
-  if (IS_ENABLED(CONFIG_ADXL362_TRIGGER)) {
-		struct sensor_trigger trig = { .chan = SENSOR_CHAN_ACCEL_XYZ };
-
-		trig.type = SENSOR_TRIG_THRESHOLD;
-		if (sensor_trigger_set(sensor, &trig, trigger_handler)) {
-			printf("Trigger set error\n");
-			//return bool;
-		}
-
-		trig.type = SENSOR_TRIG_DATA_READY;
-		if (sensor_trigger_set(sensor, &trig, trigger_handler)) {
-			printf("Trigger set error\n");
-		}
-	}
   return kTfLiteOk;
 }
+
 
 bool ReadAccelerometer(tflite::ErrorReporter* error_reporter, float* input,
                        int length) {
   int rc;
-  TF_LITE_REPORT_ERROR(error_reporter, "ReadingAccel Data\n");  // DEBUG-test
   struct sensor_value accel[3];
   int samples_count;
 
@@ -105,15 +74,12 @@ bool ReadAccelerometer(tflite::ErrorReporter* error_reporter, float* input,
   }
   // skip if there is no data
   if (!rc) {
-    TF_LITE_REPORT_ERROR(error_reporter, "There is no sensor data \n");  // DEBUG-test
     return false;
   }
-    
 
   samples_count = rc;
-  for (int i = 0; i > samples_count; i++) {
+  for (int i = 0; i < samples_count; i++) {
     rc = sensor_channel_get(sensor, SENSOR_CHAN_ACCEL_XYZ, accel);
-    TF_LITE_REPORT_ERROR(error_reporter,"rc 3 value: %d \n",rc); // DEBUG-test
     if (rc < 0) {
       TF_LITE_REPORT_ERROR(error_reporter, "ERROR: Update failed: %d\n", rc);
       return false;
@@ -146,3 +112,26 @@ bool ReadAccelerometer(tflite::ErrorReporter* error_reporter, float* input,
   }
   return true;
 }
+
+// /* Forward declaration of functions */
+// static void motion_handler(motion_data_t  motion_data);
+
+// K_SEM_DEFINE(sem, 0, 1);
+
+// static void trigger_handler(struct device *dev, struct sensor_trigger *trig)
+// {
+// 	switch (trig->type) {
+// 	case SENSOR_TRIG_DATA_READY:
+// 		if (sensor_sample_fetch(dev) < 0) {
+// 			printf("Sample fetch error\n");
+// 			return;
+// 		}
+// 		k_sem_give(&sem);
+// 		break;
+// 	case SENSOR_TRIG_THRESHOLD:
+// 		printf("Threshold trigger\n");
+// 		break;
+// 	default:
+// 		printf("Unknown trigger\n");
+// 	}
+// }
