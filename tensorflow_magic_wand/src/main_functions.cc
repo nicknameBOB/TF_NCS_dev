@@ -14,7 +14,6 @@ limitations under the License.
 ==============================================================================*/
 
 #include "tensorflow/lite/micro/examples/magic_wand/main_functions.h"
-
 #include "tensorflow/lite/micro/examples/magic_wand/accelerometer_handler.h"
 #include "tensorflow/lite/micro/examples/magic_wand/constants.h"
 #include "tensorflow/lite/micro/examples/magic_wand/gesture_predictor.h"
