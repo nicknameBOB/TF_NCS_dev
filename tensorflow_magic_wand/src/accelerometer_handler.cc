@@ -15,11 +15,18 @@ limitations under the License.
 
 #include "tensorflow/lite/micro/examples/magic_wand/accelerometer_handler.h"
 
+#include <kernel.h>
 #include <device.h>
 #include <drivers/sensor.h>
 #include <stdio.h>
 #include <string.h>
 #include <zephyr.h>
+
+#include <init.h>
+#include <drivers/gpio.h>
+#include <sys/byteorder.h>
+#include <sys/__assert.h>
+#include <drivers/spi.h>
 
 #include "motion/motion.h"
 #include "adxl362/adxl362.h"
@@ -27,13 +34,6 @@ limitations under the License.
 
 #define DT_DRV_COMPAT adi_adxl362
 
-#include <kernel.h>
-
-#include <init.h>
-#include <drivers/gpio.h>
-#include <sys/byteorder.h>
-#include <sys/__assert.h>
-#include <drivers/spi.h>
 
 #define BUFLEN 300
 int begin_index = 0;
@@ -45,6 +45,28 @@ float bufy[BUFLEN] = {0.0f};
 float bufz[BUFLEN] = {0.0f};
 
 bool initial = true;
+// /* Forward declaration of functions */
+// static void motion_handler(motion_data_t  motion_data);
+
+// K_SEM_DEFINE(sem, 0, 1);
+
+// static void trigger_handler(struct device *dev, struct sensor_trigger *trig)
+// {
+// 	switch (trig->type) {
+// 	case SENSOR_TRIG_DATA_READY:
+// 		if (sensor_sample_fetch(dev) < 0) {
+// 			printf("Sample fetch error\n");
+// 			return;
+// 		}
+// 		k_sem_give(&sem);
+// 		break;
+// 	case SENSOR_TRIG_THRESHOLD:
+// 		printf("Threshold trigger\n");
+// 		break;
+// 	default:
+// 		printf("Unknown trigger\n");
+// 	}
+// }
 
 
 TfLiteStatus SetupAccelerometer(tflite::ErrorReporter* error_reporter) {
@@ -56,6 +78,7 @@ TfLiteStatus SetupAccelerometer(tflite::ErrorReporter* error_reporter) {
   } else {
     TF_LITE_REPORT_ERROR(error_reporter, "Got accelerometer, label: %s\n",
                          DT_LABEL(DT_INST(0, adi_adxl362)));
+    printk("This happend: waht is this, it is the knowlage of achiviing the right sensor");
   }
   return kTfLiteOk;
 }
@@ -120,25 +143,3 @@ bool ReadAccelerometer(tflite::ErrorReporter* error_reporter, float* input,
   return true;
 }
 
-// /* Forward declaration of functions */
-// static void motion_handler(motion_data_t  motion_data);
-
-// K_SEM_DEFINE(sem, 0, 1);
-
-// static void trigger_handler(struct device *dev, struct sensor_trigger *trig)
-// {
-// 	switch (trig->type) {
-// 	case SENSOR_TRIG_DATA_READY:
-// 		if (sensor_sample_fetch(dev) < 0) {
-// 			printf("Sample fetch error\n");
-// 			return;
-// 		}
-// 		k_sem_give(&sem);
-// 		break;
-// 	case SENSOR_TRIG_THRESHOLD:
-// 		printf("Threshold trigger\n");
-// 		break;
-// 	default:
-// 		printf("Unknown trigger\n");
-// 	}
-// }
