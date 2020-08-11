@@ -68,18 +68,25 @@ bool ReadAccelerometer(tflite::ErrorReporter* error_reporter, float* input,
   int samples_count;
 
   rc = sensor_sample_fetch(sensor);
-  if (rc < 0) {
-    TF_LITE_REPORT_ERROR(error_reporter, "Fetch failed\n");
-    return false;
-  }
-  // skip if there is no data
-  if (!rc) {
-    return false;
-  }
+  TF_LITE_REPORT_ERROR(error_reporter, "rc = %d \n", rc);
+  // if (rc < 0) {
+  //   TF_LITE_REPORT_ERROR(error_reporter, "Fetch failed\n");
+  //   return false;
+  // }
+  // // skip if there is no data
+  // if (!rc) {
+  //   return false;
+  // }
+  int ab = sensor_channel_get(sensor, SENSOR_CHAN_ACCEL_X, &accel[0]);
+  TF_LITE_REPORT_ERROR(error_reporter, "ab = %d \n", ab);
 
   samples_count = rc;
+  TF_LITE_REPORT_ERROR(error_reporter, "samples_count = %d \n", samples_count);
   for (int i = 0; i < samples_count; i++) {
-    rc = sensor_channel_get(sensor, SENSOR_CHAN_ACCEL_XYZ, accel);
+    rc = sensor_channel_get(sensor, SENSOR_CHAN_ACCEL_X, &accel[0]);
+    rc = sensor_channel_get(sensor, SENSOR_CHAN_ACCEL_Y, &accel[1]);
+    rc = sensor_channel_get(sensor, SENSOR_CHAN_ACCEL_Z, &accel[2]);
+    TF_LITE_REPORT_ERROR(error_reporter, "rc = %d \n", rc);
     if (rc < 0) {
       TF_LITE_REPORT_ERROR(error_reporter, "ERROR: Update failed: %d\n", rc);
       return false;
