@@ -14,6 +14,7 @@ limitations under the License.
 ==============================================================================*/
 
 #include "main_functions.h"
+#include 
 
 #include <zephyr.h>
 #include <device.h>
@@ -100,93 +101,91 @@ void blink0(void)
 
 	blink(&led0, 100, 0);
 }
-void trigger_handler(struct device *dev, struct sensor_trigger *trig)
-	{
-		switch (trig->type) {
-		case SENSOR_TRIG_DATA_READY:
-			if (sensor_sample_fetch(dev) < 0) {
-				printf("Sample fetch error\n");
-				return;
-			}
-			k_sem_give(&sem);
-			break;
-		case SENSOR_TRIG_THRESHOLD:
-			printf("Threshold trigger\n");
-			break;
-		default:
-			printf("Unknown trigger\n");
-		}
-	}
+// void trigger_handler(struct device *dev, struct sensor_trigger *trig)
+// 	{
+// 		switch (trig->type) {
+// 		case SENSOR_TRIG_DATA_READY:
+// 			if (sensor_sample_fetch(dev) < 0) {
+// 				printf("Sample fetch error\n");
+// 				return;
+// 			}
+// 			k_sem_give(&sem);
+// 			break;
+// 		case SENSOR_TRIG_THRESHOLD:
+// 			printf("Threshold trigger\n");
+// 			break;
+// 		default:
+// 			printf("Unknown trigger\n");
+// 		}
+// 	}
 /* Accelerometer printer  */
 void Motion(void)
 {
+	get_motion();
+	// void main1(void);
+	// {
+	// 	struct sensor_value accel[3];
 
-	
+	// 	struct device *dev = device_get_binding(DT_LABEL(DT_INST(0, adi_adxl362)));
+	// 	if (dev == NULL) {
+	// 		printf("Device get binding device\n");
+	// 		return;
+	// 	}
 
-	void main(void);
-	{
-		struct sensor_value accel[3];
+	// 	if (IS_ENABLED(CONFIG_ADXL362_TRIGGER)) {
+	// 		struct sensor_trigger trig = { .chan = SENSOR_CHAN_ACCEL_XYZ };
 
-		struct device *dev = device_get_binding(DT_LABEL(DT_INST(0, adi_adxl362)));
-		if (dev == NULL) {
-			printf("Device get binding device\n");
-			return;
-		}
+	// 		trig.type = SENSOR_TRIG_THRESHOLD;
+	// 		if (sensor_trigger_set(dev, &trig, trigger_handler)) {
+	// 			printf("Trigger set error\n");
+	// 			return;
+	// 		}
 
-		if (IS_ENABLED(CONFIG_ADXL362_TRIGGER)) {
-			struct sensor_trigger trig = { .chan = SENSOR_CHAN_ACCEL_XYZ };
+	// 		trig.type = SENSOR_TRIG_DATA_READY;
+	// 		if (sensor_trigger_set(dev, &trig, trigger_handler)) {
+	// 			printf("Trigger set error\n");
+	// 		}
+	// 	}
 
-			trig.type = SENSOR_TRIG_THRESHOLD;
-			if (sensor_trigger_set(dev, &trig, trigger_handler)) {
-				printf("Trigger set error\n");
-				return;
-			}
+	// 	while (true) {
+	// 		if (IS_ENABLED(CONFIG_ADXL362_TRIGGER)) {
+	// 			k_sem_take(&sem, K_FOREVER);
+	// 		} else {
+	// 			k_sleep(K_MSEC(1000));
+	// 			if (sensor_sample_fetch(dev) < 0) {
+	// 				printf("Sample fetch error\n");
+	// 				return;
+	// 			}
+	// 		}
 
-			trig.type = SENSOR_TRIG_DATA_READY;
-			if (sensor_trigger_set(dev, &trig, trigger_handler)) {
-				printf("Trigger set error\n");
-			}
-		}
+	// 		if (sensor_channel_get(dev, SENSOR_CHAN_ACCEL_X, &accel[0]) < 0) {
+	// 			printf("Channel get error\n");
+	// 			return;
+	// 		}
 
-		while (true) {
-			if (IS_ENABLED(CONFIG_ADXL362_TRIGGER)) {
-				k_sem_take(&sem, K_FOREVER);
-			} else {
-				k_sleep(K_MSEC(1000));
-				if (sensor_sample_fetch(dev) < 0) {
-					printf("Sample fetch error\n");
-					return;
-				}
-			}
+	// 		if (sensor_channel_get(dev, SENSOR_CHAN_ACCEL_Y, &accel[1]) < 0) {
+	// 			printf("Channel get error\n");
+	// 			return;
+	// 		}
 
-			if (sensor_channel_get(dev, SENSOR_CHAN_ACCEL_X, &accel[0]) < 0) {
-				printf("Channel get error\n");
-				return;
-			}
+	// 		if (sensor_channel_get(dev, SENSOR_CHAN_ACCEL_Z, &accel[2]) < 0) {
+	// 			printf("Channel get error\n");
+	// 			return;
+	// 		}
 
-			if (sensor_channel_get(dev, SENSOR_CHAN_ACCEL_Y, &accel[1]) < 0) {
-				printf("Channel get error\n");
-				return;
-			}
-
-			if (sensor_channel_get(dev, SENSOR_CHAN_ACCEL_Z, &accel[2]) < 0) {
-				printf("Channel get error\n");
-				return;
-			}
-
-			printf("x: %.1f, y: %.1f, z: %.1f (m/s^2)\n",
-				sensor_value_to_double(&accel[0]),
-				sensor_value_to_double(&accel[1]),
-				sensor_value_to_double(&accel[2]));
-		}
-	}
+	// 		printf("x: %.1f, y: %.1f, z: %.1f (m/s^2)\n",
+	// 			sensor_value_to_double(&accel[0]),
+	// 			sensor_value_to_double(&accel[1]),
+	// 			sensor_value_to_double(&accel[2]));
+	// 	}
+	// }
 
 }
 
 //u32_t sleep_ms
 void tensorflow(u32_t sleep_ms)
 {
-  int main(int argc, char* argv[]); {
+  int main2(int argc, char* argv[]); {
     setup();
     while (true) {
       loop();
