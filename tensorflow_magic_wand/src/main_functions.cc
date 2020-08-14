@@ -26,6 +26,7 @@ limitations under the License.
 #include "tensorflow/lite/schema/schema_generated.h"
 #include "tensorflow/lite/version.h"
 
+#include <sys/printk.h>
 // Globals, used for compatibility with Arduino-style sketches.
 namespace {
 tflite::ErrorReporter* error_reporter = nullptr;
@@ -100,11 +101,14 @@ void setup() {
 }
 
 void loop() {
+  printk("loop start\n");
   // Attempt to read new data from the accelerometer.
   bool got_data =
       ReadAccelerometer(error_reporter, model_input->data.f, input_length);
   // If there was no new data, wait until next time.
+  //printk("Did we gett data?\n");
   if (!got_data) return;
+  printk("We Did!\n");
 
   // Run inference, and report any error.
   TfLiteStatus invoke_status = interpreter->Invoke();
@@ -115,6 +119,7 @@ void loop() {
   }
   // Analyze the results to obtain a prediction
   int gesture_index = PredictGesture(interpreter->output(0)->data.f);
+  printk("Do we predict anything?");
 
   // Produce an output
   HandleOutput(error_reporter, gesture_index);

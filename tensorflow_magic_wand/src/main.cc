@@ -16,6 +16,7 @@ limitations under the License.
 #include "tensorflow/lite/micro/examples/magic_wand/main_functions.h"
 
 #include <zephyr.h>
+#include <sys/printk.h>
 
 
 // This is the default main used on systems that have the standard C entry
@@ -26,5 +27,6 @@ int main(int argc, char* argv[]) {
   setup();
   while (true) {
     loop();
+    k_msleep(5);
   }
 }
