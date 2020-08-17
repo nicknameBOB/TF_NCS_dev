@@ -85,27 +85,32 @@ TfLiteStatus SetupAccelerometer(tflite::ErrorReporter* error_reporter) {
 
 bool ReadAccelerometer(tflite::ErrorReporter* error_reporter, float* input,
                        int length) {
-  printk("ReadAccelerometer Has started\n");
+  // printk("ReadAccelerometer Has started\n");
   int rc;
   struct sensor_value accel[3];
   int samples_count;
 
   rc = sensor_sample_fetch(sensor);
+  //printk("Data fetch of rc = %d\n", rc);
   // TF_LITE_REPORT_ERROR(error_reporter, "rc = %d \n", rc);
   if (rc < 0) {
    // TF_LITE_REPORT_ERROR(error_reporter, "Fetch failed\n");
+   //printk("Retun false since rc is less than ZERO\n");
    return false;
   }
   // skip if there is no data
-  if (!rc) {
-   return false;
-  }
-  int ab = sensor_channel_get(sensor, SENSOR_CHAN_ACCEL_X, &accel[0]);
+//  if (!rc) {
+//   TF_LITE_REPORT_ERROR(error_reporter, "Fetch failed\n");
+//   return false;
+//  }
+  // int ab = sensor_channel_get(sensor, SENSOR_CHAN_ACCEL_X, &accel[0]);
   // TF_LITE_REPORT_ERROR(error_reporter, "ab = %d \n", ab);
 
   samples_count = rc;
+  printk("Data fetch of rc = %d\n", rc);
   // TF_LITE_REPORT_ERROR(error_reporter, "samples_count = %d \n", samples_count);
   for (int i = 0; i < samples_count; i++) {
+    printk("did we gett here?");
     rc = sensor_channel_get(sensor, SENSOR_CHAN_ACCEL_X, &accel[0]);
     rc = sensor_channel_get(sensor, SENSOR_CHAN_ACCEL_Y, &accel[1]);
     rc = sensor_channel_get(sensor, SENSOR_CHAN_ACCEL_Z, &accel[2]);
@@ -141,4 +146,5 @@ bool ReadAccelerometer(tflite::ErrorReporter* error_reporter, float* input,
     sample++;
   }
   return true;
+  printk("ReadAccelerometer Has completed\n");
 }

@@ -45,6 +45,7 @@ alignas(16) uint8_t tensor_arena[kTensorArenaSize];
 
 // The name of this function is important for Arduino compatibility.
 void setup() {
+  printk("Setup start\n");
   // Set up logging. Google style is to avoid globals or statics because of
   // lifetime uncertainty, but since this has a trivial destructor it's okay.
   static tflite::MicroErrorReporter micro_error_reporter;  // NOLINT
@@ -98,6 +99,7 @@ void setup() {
   if (setup_status != kTfLiteOk) {
     TF_LITE_REPORT_ERROR(error_reporter, "Set up failed\n");
   }
+  printk("Setup end\n");
 }
 
 void loop() {
