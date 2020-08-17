@@ -103,14 +103,11 @@ void setup() {
 }
 
 void loop() {
-  printk("loop start\n");
   // Attempt to read new data from the accelerometer.
   bool got_data =
       ReadAccelerometer(error_reporter, model_input->data.f, input_length);
   // If there was no new data, wait until next time.
-  //printk("Did we gett data?\n");
   if (!got_data) return;
-  printk("We Did!\n");
 
   // Run inference, and report any error.
   TfLiteStatus invoke_status = interpreter->Invoke();

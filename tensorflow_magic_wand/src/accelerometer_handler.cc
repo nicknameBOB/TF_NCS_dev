@@ -44,29 +44,25 @@ float bufy[BUFLEN] = {0.0f};
 float bufz[BUFLEN] = {0.0f};
 
 bool initial = true;
-// /* Forward declaration of functions */
-// static void motion_handler(motion_data_t  motion_data);
 
-// K_SEM_DEFINE(sem, 0, 1);
-
-// static void trigger_handler(struct device *dev, struct sensor_trigger *trig)
-// {
-// 	switch (trig->type) {
-// 	case SENSOR_TRIG_DATA_READY:
-// 		if (sensor_sample_fetch(dev) < 0) {
-// 			printf("Sample fetch error\n");
-// 			return;
-// 		}
-// 		k_sem_give(&sem);
-// 		break;
-// 	case SENSOR_TRIG_THRESHOLD:
-// 		printf("Threshold trigger\n");
-// 		break;
-// 	default:
-// 		printf("Unknown trigger\n");
-// 	}
-// }
-
+K_SEM_DEFINE(sem, 0, 1);
+static void trigger_handler(struct device *dev, struct sensor_trigger *trig)
+{
+	switch (trig->type) {
+	case SENSOR_TRIG_DATA_READY:
+		if (sensor_sample_fetch(dev) < 0) {
+			printf("Sample fetch error\n");
+			return;
+		}
+		k_sem_give(&sem);
+		break;
+	case SENSOR_TRIG_THRESHOLD:
+		printf("Threshold trigger\n");
+		break;
+	default:
+		printf("Unknown trigger\n");
+	}
+}
 
 TfLiteStatus SetupAccelerometer(tflite::ErrorReporter* error_reporter) {
   sensor = device_get_binding(DT_LABEL(DT_INST(0, adi_adxl362)));
@@ -85,47 +81,69 @@ TfLiteStatus SetupAccelerometer(tflite::ErrorReporter* error_reporter) {
 
 bool ReadAccelerometer(tflite::ErrorReporter* error_reporter, float* input,
                        int length) {
-  // printk("ReadAccelerometer Has started\n");
-  int rc;
+
+  //length = 0;
+  //input = 0;                       
   struct sensor_value accel[3];
-  int samples_count;
+  TF_LITE_REPORT_ERROR(error_reporter, "READ Acell start\n");
+	struct device *dev = device_get_binding(DT_LABEL(DT_INST(0, adi_adxl362)));
+	if (dev == NULL) {
+		printf("Device get binding device\n");
+		return false;
+	}
 
-  rc = sensor_sample_fetch(sensor);
-  //printk("Data fetch of rc = %d\n", rc);
-  // TF_LITE_REPORT_ERROR(error_reporter, "rc = %d \n", rc);
-  if (rc < 0) {
-   // TF_LITE_REPORT_ERROR(error_reporter, "Fetch failed\n");
-   //printk("Retun false since rc is less than ZERO\n");
-   return false;
-  }
-  // skip if there is no data
-//  if (!rc) {
-//   TF_LITE_REPORT_ERROR(error_reporter, "Fetch failed\n");
-//   return false;
-//  }
-  // int ab = sensor_channel_get(sensor, SENSOR_CHAN_ACCEL_X, &accel[0]);
-  // TF_LITE_REPORT_ERROR(error_reporter, "ab = %d \n", ab);
+	if (IS_ENABLED(CONFIG_ADXL362_TRIGGER)) {
+		struct sensor_trigger trig = { .chan = SENSOR_CHAN_ACCEL_XYZ };
 
-  samples_count = rc;
-  printk("Data fetch of rc = %d\n", rc);
-  // TF_LITE_REPORT_ERROR(error_reporter, "samples_count = %d \n", samples_count);
-  for (int i = 0; i < samples_count; i++) {
-    printk("did we gett here?");
-    rc = sensor_channel_get(sensor, SENSOR_CHAN_ACCEL_X, &accel[0]);
-    rc = sensor_channel_get(sensor, SENSOR_CHAN_ACCEL_Y, &accel[1]);
-    rc = sensor_channel_get(sensor, SENSOR_CHAN_ACCEL_Z, &accel[2]);
-    // TF_LITE_REPORT_ERROR(error_reporter, "rc = %d \n", rc);
-    if (rc < 0) {
-      // TF_LITE_REPORT_ERROR(error_reporter, "ERROR: Update failed: %d\n", rc);
+		trig.type = SENSOR_TRIG_THRESHOLD;
+		if (sensor_trigger_set(dev, &trig, trigger_handler)) {
+			printf("Trigger set error\n");
+			return false;
+		}
+
+		trig.type = SENSOR_TRIG_DATA_READY;
+		if (sensor_trigger_set(dev, &trig, trigger_handler)) {
+			printf("Trigger set error\n");
+		}
+	}
+
+
+  if (IS_ENABLED(CONFIG_ADXL362_TRIGGER)) {
+    k_sem_take(&sem, K_FOREVER);
+  } else {
+    k_sleep(K_MSEC(1000));
+    if (sensor_sample_fetch(dev) < 0) {
+      printf("Sample fetch error\n");
       return false;
     }
-    bufx[begin_index] = (float)sensor_value_to_double(&accel[0]);
-    bufy[begin_index] = (float)sensor_value_to_double(&accel[1]);
-    bufz[begin_index] = (float)sensor_value_to_double(&accel[2]);
-    begin_index++;
-    if (begin_index >= BUFLEN) begin_index = 0;
   }
 
+  if (sensor_channel_get(dev, SENSOR_CHAN_ACCEL_X, &accel[0]) < 0) {
+    printf("Channel get error\n");
+    return false;
+  }
+
+  if (sensor_channel_get(dev, SENSOR_CHAN_ACCEL_Y, &accel[1]) < 0) {
+    printf("Channel get error\n");
+    return false;
+  }
+
+  if (sensor_channel_get(dev, SENSOR_CHAN_ACCEL_Z, &accel[2]) < 0) {
+    printf("Channel get error\n");
+    return false;
+  }
+
+  // printf("x: %.1f, y: %.1f, z: %.1f (m/s^2)\n",
+  // 	sensor_value_to_double(&accel[0]),
+  // 	sensor_value_to_double(&accel[1]),
+  // 	sensor_value_to_double(&accel[2]));
+
+  bufx[begin_index] = (float)sensor_value_to_double(&accel[0]);
+  bufy[begin_index] = (float)sensor_value_to_double(&accel[1]);
+  bufz[begin_index] = (float)sensor_value_to_double(&accel[2]);
+  begin_index++;
+  if (begin_index >= BUFLEN) begin_index = 0;
+  
   if (initial && begin_index >= 100) {
     initial = false;
   }
@@ -145,6 +163,7 @@ bool ReadAccelerometer(tflite::ErrorReporter* error_reporter, float* input,
     input[i + 2] = bufz[ring_index];
     sample++;
   }
-  return true;
   printk("ReadAccelerometer Has completed\n");
+  return true;
+  
 }
