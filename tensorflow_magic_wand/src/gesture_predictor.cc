@@ -13,10 +13,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-#include "tensorflow/lite/micro/examples/magic_wand/gesture_predictor.h"
-
-#include "tensorflow/lite/micro/examples/magic_wand/constants.h"
-
+#include "gesture_predictor.h"
+#include "constants.h"
+// tensorflow/lite/micro/examples/magic_wand/
 namespace {
 // State for the averaging algorithm we're using.
 float prediction_history[kGestureCount][kPredictionHistoryLength] = {};

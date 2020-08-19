@@ -13,8 +13,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-#include "tensorflow/lite/micro/examples/magic_wand/slope_micro_features_data.h"
-
+#include "slope_micro_features_data.h"
+// tensorflow/lite/micro/examples/magic_wand/
 const int g_slope_micro_f2e59fea_nohash_1_length = 128;
 const int g_slope_micro_f2e59fea_nohash_1_dim = 3;
 // Raw accelerometer data with a sample rate of 25Hz

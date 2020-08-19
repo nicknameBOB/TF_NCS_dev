@@ -12,13 +12,28 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
+// tensorflow/lite/micro/examples/magic_wand/
 
-#include "tensorflow/lite/micro/examples/magic_wand/main_functions.h"
-#include "tensorflow/lite/micro/examples/magic_wand/accelerometer_handler.h"
-#include "tensorflow/lite/micro/examples/magic_wand/constants.h"
-#include "tensorflow/lite/micro/examples/magic_wand/gesture_predictor.h"
-#include "tensorflow/lite/micro/examples/magic_wand/magic_wand_model_data.h"
-#include "tensorflow/lite/micro/examples/magic_wand/output_handler.h"
+
+// #include "tensorflow/lite/micro/examples/magic_wand/main_functions.h"
+// #include "tensorflow/lite/micro/examples/magic_wand/accelerometer_handler.h"
+// #include "tensorflow/lite/micro/examples/magic_wand/constants.h"
+// #include "tensorflow/lite/micro/examples/magic_wand/gesture_predictor.h"
+// #include "tensorflow/lite/micro/examples/magic_wand/magic_wand_model_data.h"
+// #include "tensorflow/lite/micro/examples/magic_wand/output_handler.h"
+// #include "tensorflow/lite/micro/kernels/micro_ops.h"
+// #include "tensorflow/lite/micro/micro_error_reporter.h"
+// #include "tensorflow/lite/micro/micro_interpreter.h"
+// #include "tensorflow/lite/micro/micro_mutable_op_resolver.h"
+// #include "tensorflow/lite/schema/schema_generated.h"
+// #include "tensorflow/lite/version.h"
+
+#include "main_functions.h"
+#include "accelerometer_handler.h"
+#include "constants.h"
+#include "gesture_predictor.h"
+#include "magic_wand_model_data.h"
+#include "output_handler.h"
 #include "tensorflow/lite/micro/kernels/micro_ops.h"
 #include "tensorflow/lite/micro/micro_error_reporter.h"
 #include "tensorflow/lite/micro/micro_interpreter.h"
@@ -99,7 +114,7 @@ void setup() {
   if (setup_status != kTfLiteOk) {
     TF_LITE_REPORT_ERROR(error_reporter, "Set up failed\n");
   }
-  printk("Setup end\n");
+  printk("Setup complete\n");
 }
 
 void loop() {
@@ -118,8 +133,9 @@ void loop() {
   }
   // Analyze the results to obtain a prediction
   int gesture_index = PredictGesture(interpreter->output(0)->data.f);
-  printk("Do we predict anything?");
+  // printk("Do we predict anything?");
 
   // Produce an output
+  printk("%d\n",gesture_index);
   HandleOutput(error_reporter, gesture_index);
 }

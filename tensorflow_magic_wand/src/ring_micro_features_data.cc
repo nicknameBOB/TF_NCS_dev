@@ -13,8 +13,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-#include "tensorflow/lite/micro/examples/magic_wand/ring_micro_features_data.h"
-
+#include "ring_micro_features_data.h"
+// tensorflow/lite/micro/examples/magic_wand/
 const int g_ring_micro_f9643d42_nohash_4_length = 128;
 const int g_ring_micro_f9643d42_nohash_4_dim = 3;
 // Raw accelerometer data with a sample rate of 25Hz

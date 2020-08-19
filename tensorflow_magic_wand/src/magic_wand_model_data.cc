@@ -17,7 +17,8 @@ limitations under the License.
 // xxd -i magic_wand_model.tflite > magic_wand_model_data.cc
 // See the README for a full description of the creation process.
 
-#include "tensorflow/lite/micro/examples/magic_wand/magic_wand_model_data.h"
+#include "magic_wand_model_data.h"
+//tensorflow/lite/micro/examples/magic_wand/
 #ifdef __has_attribute
 #define HAVE_ATTRIBUTE(x) __has_attribute(x)
 #else

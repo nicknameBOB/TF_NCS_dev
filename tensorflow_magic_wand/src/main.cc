@@ -13,8 +13,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-#include "tensorflow/lite/micro/examples/magic_wand/main_functions.h"
-
+#include "main_functions.h"
+// tensorflow/lite/micro/examples/magic_wand/
 #include <zephyr.h>
 #include <sys/printk.h>
 

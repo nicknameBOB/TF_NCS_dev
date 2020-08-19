@@ -13,8 +13,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-#include "tensorflow/lite/micro/examples/magic_wand/output_handler.h"
-
+#include "output_handler.h"
+// tensorflow/lite/micro/examples/magic_wand/
 void HandleOutput(tflite::ErrorReporter* error_reporter, int kind) {
   // light (red: wing, blue: ring, green: slope)
   if (kind == 0) {
@@ -34,17 +34,9 @@ void HandleOutput(tflite::ErrorReporter* error_reporter, int kind) {
         error_reporter,
         "SLOPE:\n\r        *\n\r       *\n\r      *\n\r     *\n\r    "
         "*\n\r   *\n\r  *\n\r * * * * * * * *\n\r");
-  } else if (kind == 3) {
-    TF_LITE_REPORT_ERROR(
-        error_reporter,
-        "Nothing:\n\r "
-          "  /$$   /$$ /$$$$$$ /$$$$$$$$/$$   /$$/$$$$$$/$$   /$$ /$$$$$$    \n\r"
-          "  | $$$ | $$/$$__  $|__  $$__| $$  | $|_  $$_| $$$ | $$/$$__  $$  \n\r"
-          "  | $$$$| $| $$  \\ $$  | $$  | $$  | $$ | $$ | $$$$| $| $$  \\__/  \n\r"
-          "  | $$ $$ $| $$  | $$  | $$  | $$$$$$$$ | $$ | $$ $$ $| $$ /$$$$  \n\r"
-          "  | $$  $$$| $$  | $$  | $$  | $$__  $$ | $$ | $$  $$$| $$|_  $$  \n\r"
-          "  | $$\\  $$| $$  | $$  | $$  | $$  | $$ | $$ | $$\\  $$| $$  \\ $$  \n\r"
-          "  | $$ \\  $|  $$$$$$/  | $$  | $$  | $$/$$$$$| $$ \\  $|  $$$$$$/  \n\r"
-          "  |__/  \\__/\\______/   |__/  |__/  |__|______|__/  \\__/\\______/   \n\r");
-  }
+   }// else if (kind == 3) {
+  //   TF_LITE_REPORT_ERROR(
+  //       error_reporter,
+  //       "Nothing Detected:\n\r ");
+  // }
 }

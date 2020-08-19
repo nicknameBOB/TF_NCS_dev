@@ -13,8 +13,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-#include "tensorflow/lite/micro/examples/magic_wand/accelerometer_handler.h"
-
+#include "accelerometer_handler.h"
+// tensorflow/lite/micro/examples/magic_wand/
 #include <kernel.h>
 #include <device.h>
 #include <drivers/sensor.h>
@@ -27,22 +27,17 @@ limitations under the License.
 #include <sys/byteorder.h>
 #include <sys/__assert.h>
 #include <drivers/spi.h>
-
-#include "motion/motion.h"
-#include "adxl362/adxl362.h"
 #include <logging/log.h>
 
 #define DT_DRV_COMPAT adi_adxl362
-
 #define BUFLEN 300
 int begin_index = 0;
-struct device* sensor = NULL;
 int current_index = 0;
+struct device* sensor = NULL;
 
 float bufx[BUFLEN] = {0.0f};
 float bufy[BUFLEN] = {0.0f};
 float bufz[BUFLEN] = {0.0f};
-
 bool initial = true;
 
 K_SEM_DEFINE(sem, 0, 1);
@@ -81,11 +76,7 @@ TfLiteStatus SetupAccelerometer(tflite::ErrorReporter* error_reporter) {
 
 bool ReadAccelerometer(tflite::ErrorReporter* error_reporter, float* input,
                        int length) {
-
-  //length = 0;
-  //input = 0;                       
   struct sensor_value accel[3];
-  TF_LITE_REPORT_ERROR(error_reporter, "READ Acell start\n");
 	struct device *dev = device_get_binding(DT_LABEL(DT_INST(0, adi_adxl362)));
 	if (dev == NULL) {
 		printf("Device get binding device\n");
@@ -143,7 +134,7 @@ bool ReadAccelerometer(tflite::ErrorReporter* error_reporter, float* input,
   bufz[begin_index] = (float)sensor_value_to_double(&accel[2]);
   begin_index++;
   if (begin_index >= BUFLEN) begin_index = 0;
-  
+
   if (initial && begin_index >= 100) {
     initial = false;
   }
@@ -163,7 +154,7 @@ bool ReadAccelerometer(tflite::ErrorReporter* error_reporter, float* input,
     input[i + 2] = bufz[ring_index];
     sample++;
   }
-  printk("ReadAccelerometer Has completed\n");
+  //printk("ReadAccelerometer Has completed\n");
   return true;
-  
+
 }
