@@ -160,7 +160,7 @@ bool ReadAccelerometer(tflite::ErrorReporter* error_reporter, float* input,
 	Val1 = (float)(sensor_value_to_double(&accel[1]))*100;
 	Val2 = (float)(sensor_value_to_double(&accel[2]))*100;
 
-	printf("x: %.1f, y: %.1f, z: %.1f\n", Val0, Val1,	Val2);
+	// printf("x: %.1f, y: %.1f, z: %.1f\n", Val0, Val1, Val2);
 
   // printf("%.2f\n %d\n",&accel[0], bufz);
 	// printf("x: %.1f, y: %.1f, z: %.1f (m/s^2)\n",
