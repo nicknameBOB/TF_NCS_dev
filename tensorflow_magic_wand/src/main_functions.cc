@@ -136,6 +136,6 @@ void loop() {
   // printk("Do we predict anything?");
 
   // Produce an output
-  printk("%d\n",gesture_index);
+  // printk("%d\n",gesture_index);
   HandleOutput(error_reporter, gesture_index);
 }

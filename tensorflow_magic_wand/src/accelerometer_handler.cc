@@ -35,6 +35,10 @@ int begin_index = 0;
 int current_index = 0;
 struct device* sensor = NULL;
 
+float Val0 = 0.0f;
+float Val1 = 0.0f;
+float Val2 = 0.0f;
+
 float bufx[BUFLEN] = {0.0f};
 float bufy[BUFLEN] = {0.0f};
 float bufz[BUFLEN] = {0.0f};
@@ -52,7 +56,7 @@ static void trigger_handler(struct device *dev, struct sensor_trigger *trig)
 		k_sem_give(&sem);
 		break;
 	case SENSOR_TRIG_THRESHOLD:
-		printf("Threshold trigger\n");
+		// printf("Threshold trigger\n");
 		break;
 	default:
 		printf("Unknown trigger\n");
@@ -124,14 +128,11 @@ bool ReadAccelerometer(tflite::ErrorReporter* error_reporter, float* input,
     return false;
   }
 
-  // printf("x: %.1f, y: %.1f, z: %.1f (m/s^2)\n",
-  // 	sensor_value_to_double(&accel[0]),
-  // 	sensor_value_to_double(&accel[1]),
-  // 	sensor_value_to_double(&accel[2]));
 
-  bufx[begin_index] = (float)sensor_value_to_double(&accel[0]);
-  bufy[begin_index] = (float)sensor_value_to_double(&accel[1]);
-  bufz[begin_index] = (float)sensor_value_to_double(&accel[2]);
+
+  bufx[begin_index] = (float)(sensor_value_to_double(&accel[0]))*100;
+  bufy[begin_index] = (float)(sensor_value_to_double(&accel[1]))*100;
+  bufz[begin_index] = (float)(sensor_value_to_double(&accel[2]))*100;
   begin_index++;
   if (begin_index >= BUFLEN) begin_index = 0;
 
@@ -154,7 +155,18 @@ bool ReadAccelerometer(tflite::ErrorReporter* error_reporter, float* input,
     input[i + 2] = bufz[ring_index];
     sample++;
   }
-  //printk("ReadAccelerometer Has completed\n");
-  return true;
 
+	Val0 = (float)(sensor_value_to_double(&accel[0]))*100;
+	Val1 = (float)(sensor_value_to_double(&accel[1]))*100;
+	Val2 = (float)(sensor_value_to_double(&accel[2]))*100;
+
+	printf("x: %.1f, y: %.1f, z: %.1f\n", Val0, Val1,	Val2);
+
+  // printf("%.2f\n %d\n",&accel[0], bufz);
+	// printf("x: %.1f, y: %.1f, z: %.1f (m/s^2)\n",
+	// 	sensor_value_to_double(&accel[0]),
+	// 	sensor_value_to_double(&accel[1]),
+	// 	sensor_value_to_double(&accel[2]));
+  // printk("ReadAccelerometer Has completed\n");
+  return true;
 }
