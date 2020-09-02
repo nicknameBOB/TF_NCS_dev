@@ -8,11 +8,11 @@ manifest:
     - name: fw-nrfconnect-nrf
       path: nrf
       remote: nordic
-      revision: v1.3.0 # b645926ab1aab57b1569a5473c4b52a2c28cf880
+      revision: v1.3.0
       import: true
     - name: tensorflow
       path: tensorflow
       remote: tensorflow
-      revision: 4b0a6f818fa8e3c38fd0cf68d9a647f82cf6c93a
+      revision: v2.3.0
   self:
     path: tf_ncs_dev
