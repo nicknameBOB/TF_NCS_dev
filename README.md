@@ -30,10 +30,13 @@ Link to TF lite micro: https://www.tensorflow.org/lite/microcontrollers
 Link to TF lite micro Hello World! exampel: https://github.com/tensorflow/tensorflow/tree/master/tensorflow/lite/micro/examples/hello_world  
 Link to NCS install guide: https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/gs_installing.html  
 
-### How to set up
-This is how I did it:  
+### How to set up:
+#### This is still undergoing testing and might not be complete or might not cover all aspects.
+This is how I did it on linux:  
 Operating system: linux based  
 
+Note: make sure that you have the correct enviroment and tools available and installed on your operating system.
+West, nRF commandline tools, python 3.X, git ect.. plaes read the 
 ### 1
 Create folder called ncs(or something you like)  
 clone this repo in that folder  
