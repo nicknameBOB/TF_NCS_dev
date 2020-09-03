@@ -21,10 +21,8 @@ pip3
 west  
 ect..  
 
-NCS repo  
-tenserflow repo
-these to repository should be included when using west   
-how u want to setup it u is up to u    
+NCS repo and tenserflow repo,  
+these two repositories should be included.      
 
 Link to TF lite micro: https://www.tensorflow.org/lite/microcontrollers  
 Link to TF lite micro Hello World! exampel: https://github.com/tensorflow/tensorflow/tree/master/tensorflow/lite/micro/examples/hello_world  
@@ -36,17 +34,22 @@ This is how I did it on linux:
 Operating system: linux based  
 
 Note: make sure that you have the correct enviroment and tools available and installed on your operating system.
-West, nRF commandline tools, python 3.X, git ect.. plaes read the 
+West, nRF commandline tools, python 3.X, git ect.. if you have the tools to work on sdk-nrf(https://github.com/nrfconnect/sdk-nrf) then the only additional requirement is including tensorflow(https://github.com/tensorflow/tensorflow)
 ### 1
 Create folder called ncs(or something you like)  
-clone this repo in that folder  
-use west init-l to initiate the repository
-use west update to gett evertying (rin it twice to makes shure everthingis up to date)
+clone this repo in that folder using git clone
+use ``west init-l`` to initiate the repository
+use ``west update`` to gett evertying (run this command twice to makes sure everything is up to date)  
+### Alternativ step 1  
+Use ``west init -m <this repo link>`` in the folder you want the project  
+
 
 follow Zephyrs guide on how to set up comandline tools and enviroment variabels. 
 
 ### 2
-go to the tensorflow foleder that shuld have been created during sep 1  
+Now locate the tensorflow folder and open a terminal, run the following command:  
+``make -f tensorflow/lite/micro/tools/make/Makefile third_party_downloads``
+
 
 
 ### How to run an example 
