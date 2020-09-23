@@ -31,9 +31,9 @@ Link to TF lite micro: https://www.tensorflow.org/lite/microcontrollers
 Link to TF lite micro Hello World! exampel: https://github.com/tensorflow/tensorflow/tree/master/tensorflow/lite/micro/examples/hello_world  
 Link to NCS install guide: https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/gs_installing.html  
 
-### How to set up:
+### How to set up
 
-#### This is still undergoing testing and might not be complete or might not cover all aspects.
+#### This is still undergoing testing and might not be complete or might not cover all aspects
 
 Operating system: linux (Manjaro XFCE)
 
@@ -58,9 +58,23 @@ follow Zephyrs guide on how to set up comandline tools and enviroment variabels.
 Now locate the tensorflow folder and open a terminal, run the following command:  
 ``make -f tensorflow/lite/micro/tools/make/Makefile third_party_downloads``
 
+##### Alternative OS (Windows)
+
+Operating system: Windows 10  
+Note: Alternative solution on Windows 10 where you need to include the prebuilt tenerflow repositroy. You also need all the above mationd toolchain's.  
+
+##### Windows 10 step 1
+
+Install python, west, nrf commandline tools ect... , and update your enviroment variabels.
+Make a new folder somewhare(preferably under C/: disk) and name it ncs(or somwthing you prefer) open a terminal window in the folder.
+
+sd 
+
+
+
 ### How to run an example
 
-Make shure you have the flatbuffers/flatbufers.h file, this can be made runing the following in the terminal:
+Make shure you have the **flatbuffers/flatbufers.h** file, this can be made runing the following in the terminal:
 
 run: ```make -f tensorflow/lite/micro/tools/make/Makefile third_party_downloads```  
 
@@ -72,11 +86,12 @@ Then you can do the following to build whit Cmake
 go to example >TF_hello_world_nrfXX
 run: ```west build -b ``<your board of choice>`` ```
 run: ```west flash```
+___
 
 ## How to use segger system view
 
-Moddify the file profiler_sysview.h file in path nrf>subsys>profiler> to include ``#include <SEGGER_SYSVIEW.h>``.
-in the proj.conf file of your project add the following:
+Moddify the file *profiler_sysview.h* file in path l to include ``#include <SEGGER_SYSVIEW.h>``.
+in the *proj.conf* file of your project add the following:
 ```
 CONFIG_PROFILER=y  
 CONFIG_USE_SEGGER_RTT=y  
