@@ -7,7 +7,6 @@ ___
 **🚧** There is no guarantee that this repo will work **🚧**
 ___
 
-
 ##### Description
 
 > Tensorflow examples in zephyr on nrf products:  
@@ -68,10 +67,6 @@ Note: Alternative solution on Windows 10 where you need to include the prebuilt 
 Install python, west, nrf commandline tools ect... , and update your enviroment variabels.
 Make a new folder somewhare(preferably under C/: disk) and name it ncs(or somwthing you prefer) open a terminal window in the folder.
 
-sd 
-
-
-
 ### How to run an example
 
 Make shure you have the **flatbuffers/flatbufers.h** file, this can be made runing the following in the terminal:
@@ -90,8 +85,8 @@ ___
 
 ## How to use segger system view
 
-Moddify the file *profiler_sysview.h* file in path l to include ``#include <SEGGER_SYSVIEW.h>``.
-in the *proj.conf* file of your project add the following:
+Moddify the file *profiler_sysview.c* file in path *nrf>subsys>profiler* to include ``#include <SEGGER_SYSVIEW.h>``.
+In the *proj.conf* file of your project add the following:
 ```
 CONFIG_PROFILER=y  
 CONFIG_USE_SEGGER_RTT=y  
