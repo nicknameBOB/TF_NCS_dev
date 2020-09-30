@@ -38,21 +38,32 @@ West, nRF commandline tools, python 3.X, git ect.. if you have the tools to work
 Create folder called ncs(or something you like) and clone this repo in that folder using git clone.
 use ``west init-l`` to initiate the repository
 use ``west update`` to gett evertying (run this command twice to makes sure everything is up to date)  
-
 or use ``west init -m <this repo link>`` in the folder you want the project. 
 
 **Locate the tensorflow folder and update the third party downloads**
 Now locate the tensorflow folder and open a terminal, run the following command:  
 ``make -f tensorflow/lite/micro/tools/make/Makefile third_party_downloads``
 
+**Now go to example**
+Select the example folder of interest and follow the steps of How to run an example.
+
+
 #### Alternative OS (Windows)
 
 Operating system: Windows 10  
-Note: Alternative solution on Windows 10 where you need to include the prebuilt tenerflow repositroy. You also need all the above mationd toolchain's.  
+Note: Alternative solution on Windows 10 where you need to include the pre built tensorflow repository. 
 
-**Windows 10 step 1**
+**First step is creating a workplace\work enviroment**
+Mostly follow the same steps as for the linux guide. Follow the install guide, get the workspace tools:
 Install python, west, nrf commandline tools ect... , and update your enviroment variabels.
-Make a new folder somewhare(preferably under C/: disk) and name it ncs(or somwthing you prefer) open a terminal window in the folder.
+Make a new folder somewhare(preferably under C/: disk) and name it ncs(or somwthing you prefer) open a terminal window in the folder and complete the; 
+use ``west init-l`` to initiate the repository
+use ``west update`` to gett evertying (run this command twice to makes sure everything is up to date)  
+or use ``west init -m <this repo link>`` in the folder you want the project. 
+
+**Locate the tensorflow folder and update the third party downloads**
+Now locate the tensorflow folder and include the missing files, *provided by link ? or generated on a linux system*, this can be done by replacing the entire tensorflow folder with an prebuilt one that has all the build files and dependencies included(testet) or by only including the flatbuffers.h file(not tested).
+
 
 ### How to run an example
 
